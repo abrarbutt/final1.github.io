@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: green;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+        }
+
+        .navbar-nav .nav-link:hover {
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+            color: white;
+        }
+
+        .box-image {
+            width: 50%;
+            float: left;
+        }
+
+        .box-content {
+            width: 50%;
+            float: right;
+            padding-left: 20px;
+            color: black;
+        }
+
+        .box-date {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .box-heading {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .box-description {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .box-link {
+            color: green;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .box-link:hover {
+            text-decoration: underline;
+        }
+
+        .name-button {
+            color: white;
+            background-color: green;
+            border: 2px solid white;
+        }
+
+        footer {
+            background-color: white;
+            padding: 50px;
+            text-align: center;
+            color: green;
+            font-weight: bold;
+        }
+
+        .col-md-8 li {
+            list-style: none;
+        }
+
+        /* Adjust image dimensions */
+        .box-image img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link text-white" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="registration.html">Registration</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="record.html">Records</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="About.html">About</a>
+                </li>
+            </ul>
+        </div>
+        <button class="btn btn-primary ml-auto name-button">Name</button>
+    </nav>
+
+    <div class="content">
+        <div class="row" id="boxContainer">
+            <!-- Boxes will be dynamically populated here -->
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>My News Website</h4>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Travels</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <ul>
+                                <li><a href="#">Recommendation</a></li>
+                                <li><a href="#">Mission Statment</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <ul>
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Promo Fli</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <ul>
+                                <li><a href="#">Guides </a></li>
+                                <li><a href="#">The Team</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>&copy; 2023 My Website. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <script>
+        function fetchData() {
+            const boxContainer = document.getElementById('boxContainer');
+
+            // Fetch API data
+            fetch('https://newsapi.org/v2/everything?q=apple&from=2023-07-04&to=2023-07-04&sortBy=popularity&apiKey=f7d54802ae9d4e2eb6b90d6e456b63ee')
+                .then(response => response.json())
+                .then(data => {
+                    // API request successful, populate boxes with API data
+                    data.articles.forEach(article => {
+                        const boxCol = document.createElement('div');
+                        boxCol.classList.add('col-md-6');
+
+                        const box = document.createElement('div');
+                        box.classList.add('box');
+
+                        const boxImage = document.createElement('div');
+                        boxImage.classList.add('box-image');
+
+                        const image = document.createElement('img');
+                        image.src = article.urlToImage;
+                        image.alt = 'Image';
+                        image.classList.add('img-fluid');
+                        image.style.maxWidth = '100%'; // Set max width for images
+
+                        const boxContent = document.createElement('div');
+                        boxContent.classList.add('box-content');
+
+                        const boxDate = document.createElement('p');
+                        boxDate.classList.add('box-date');
+                        boxDate.textContent = article.publishedAt;
+
+                        const boxHeading = document.createElement('h3');
+                        boxHeading.classList.add('box-heading');
+                        boxHeading.textContent = article.title;
+
+                        const boxDescription = document.createElement('p');
+                        boxDescription.classList.add('box-description');
+                        boxDescription.textContent = truncateText(article.description, 150);
+
+                        const boxLink = document.createElement('a');
+                        boxLink.classList.add('box-link');
+                        boxLink.href = article.url;
+                        boxLink.textContent = 'Read More';
+
+                        // Append elements to box
+                        boxImage.appendChild(image);
+                        boxContent.appendChild(boxDate);
+                        boxContent.appendChild(boxHeading);
+                        boxContent.appendChild(boxDescription);
+                        boxContent.appendChild(boxLink);
+                        box.appendChild(boxImage);
+                        box.appendChild(boxContent);
+                        boxCol.appendChild(box);
+
+                        // Append box to box container
+                        boxContainer.appendChild(boxCol);
+                    });
+                })
+                .catch(error => {
+                    console.log('API request failed:', error);
+                    // API request failed, populate boxes with dummy data
+                    const dummyData = [
+                        {
+                            image: 'dummy_image1.jpg',
+                            date: 'Dummy Date 1',
+                            heading: 'Dummy Heading 1',
+                            description: 'Dummy Description 1',
+                            link: '#'
+                        },
+                        {
+                            image: 'dummy_image2.jpg',
+                            date: 'Dummy Date 2',
+                            heading: 'Dummy Heading 2',
+                            description: 'Dummy Description 2',
+                            link: '#'
+                        },
+                        {
+                            image: 'dummy_image3.jpg',
+                            date: 'Dummy Date 3',
+                            heading: 'Dummy Heading 3',
+                            description: 'Dummy Description 3',
+                            link: '#'
+                        },
+                        {
+                            image: 'dummy_image4.jpg',
+                            date: 'Dummy Date 4',
+                            heading: 'Dummy Heading 4',
+                            description: 'Dummy Description 4',
+                            link: '#'
+                        },
+                        {
+                            image: 'dummy_image5.jpg',
+                            date: 'Dummy Date 5',
+                            heading: 'Dummy Heading 5',
+                            description: 'Dummy Description 5',
+                            link: '#'
+                        },
+                        {
+                            image: 'dummy_image6.jpg',
+                            date: 'Dummy Date 6',
+                            heading: 'Dummy Heading 6',
+                            description: 'Dummy Description 6',
+                            link: '#'
+                        },
+                        {
+                            image: 'dummy_image7.jpg',
+                            date: 'Dummy Date 7',
+                            heading: 'Dummy Heading 7',
+                            description: 'Dummy Description 7',
+                            link: '#'
+                        },
+                        {
+                            image: 'dummy_image8.jpg',
+                            date: 'Dummy Date 8',
+                            heading: 'Dummy Heading 8',
+                            description: 'Dummy Description 8',
+                            link: '#'
+                        },
+                        // Add more dummy data objects as needed
+                    ];
+
+                    dummyData.forEach(data => {
+                        const boxCol = document.createElement('div');
+                        boxCol.classList.add('col-md-6');
+
+                        const box = document.createElement('div');
+                        box.classList.add('box');
+
+                        const boxImage = document.createElement('div');
+                        boxImage.classList.add('box-image');
+
+                        const image = document.createElement('img');
+                        image.src = data.image;
+                        image.alt = 'Image';
+                        image.classList.add('img-fluid');
+                        image.style.maxWidth = '100%'; // Set max width for images
+
+                        const boxContent = document.createElement('div');
+                        boxContent.classList.add('box-content');
+
+                        const boxDate = document.createElement('p');
+                        boxDate.classList.add('box-date');
+                        boxDate.textContent = data.date;
+
+                        const boxHeading = document.createElement('h3');
+                        boxHeading.classList.add('box-heading');
+                        boxHeading.textContent = data.heading;
+
+                        const boxDescription = document.createElement('p');
+                        boxDescription.classList.add('box-description');
+                        boxDescription.textContent = data.description;
+
+                        const boxLink = document.createElement('a');
+                        boxLink.classList.add('box-link');
+                        boxLink.href = data.link;
+                        boxLink.textContent = 'Read More';
+
+                        // Append elements to box
+                        boxImage.appendChild(image);
+                        boxContent.appendChild(boxDate);
+                        boxContent.appendChild(boxHeading);
+                        boxContent.appendChild(boxDescription);
+                        boxContent.appendChild(boxLink);
+                        box.appendChild(boxImage);
+                        box.appendChild(boxContent);
+                        boxCol.appendChild(box);
+
+                        // Append box to box container
+                        boxContainer.appendChild(boxCol);
+                    });
+                });
+        }
+
+        function truncateText(text, maxLength) {
+            if (text.length > maxLength) {
+                return text.substr(0, maxLength - 3) + '...';
+            }
+            return text;
+        }
+
+        // Fetch data on page load
+        fetchData();
+    </script>
+</body>
+
+</html>
